@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="title">Add New Medicine</h1>
+<div class="form-card">
+  <form method="POST">
+    <label>Medicine Name</label>
+    <input name="name" required>
+
+    <label>Category</label>
+    <select name="category">
+      <option value="">-- Select Category --</option>
+      {% for c in categories %}
+      <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Description</label>
+    <textarea name="description" rows="3"></textarea>
+
+    <hr style="margin:20px 0;">
+    <h3>Optional: Initial Batch</h3>
+    <input name="batch_no" placeholder="Batch No">
+    <input name="quantity" type="number" placeholder="Quantity">
+    <input name="expiry" type="date">
+
+    <button class="primary" type="submit">Add Medicine</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<h1 class="title">Edit Batch</h1>
+<div class="form-card">
+  <form method="POST">
+    <p class="muted" style="margin-bottom:12px;">Medicine: <strong>{{ batch.medicine_name }}</strong></p>
+
+    <label>Batch Number</label>
+    <input name="batch_no" value="{{ batch.batch_no or '' }}">
+
+    <label>Quantity</label>
+    <input name="quantity" type="number" min="0" value="{{ batch.quantity }}">
+
+    <label>Expiry Date</label>
+    <input name="expiry" type="date" value="{{ batch.expiry_date }}">
+
+    <button class="primary" type="submit">Save Changes</button>
+    <a class="danger" href="/">Cancel</a>
+  </form>
+</div>
+
+{% endblock %}

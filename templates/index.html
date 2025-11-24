@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<section class="hero">
+  <div>
+    <p class="eyebrow">Inventory overview</p>
+    <h1>Medi-Vault dashboard</h1>
+    <p class="subtitle">Track medicines, batches, and expiries with a polished overview.</p>
+  </div>
+  <form class="search" method="get" action="/">
+    <input name="q" placeholder="Search medicine or batch" value="{{ search_query }}">
+    {% if search_query %}
+    <a class="clear" href="/">Clear</a>
+    {% endif %}
+    <button type="submit">Search</button>
+  </form>
+</section>
+
+<section class="stats">
+  <div class="stat-pill">
+    <span class="label">Total Medicines</span>
+    <span class="value accent">{{ stats.total_medicines }}</span>
+  </div>
+  <div class="stat-pill">
+    <span class="label">Total Batches</span>
+    <span class="value accent">{{ stats.total_batches }}</span>
+  </div>
+  <div class="stat-pill warning">
+    <span class="label">Upcoming Expiries (30d)</span>
+    <span class="value warning-text">{{ stats.upcoming_expiries }}</span>
+  </div>
+  <div class="stat-pill">
+    <span class="label">Expired Batches</span>
+    <span class="value danger-text">{{ stats.expired_batches }}</span>
+  </div>
+</section>
+
+{% if medicines %}
+<section class="grid">
+  {% for med in medicines %}
+  <article class="card">
+    <header class="card-head">
+      <div>
+        <h3>{{ med.name }}</h3>
+        <p class="muted">{{ med.category or 'Uncategorized' }}</p>
+      </div>
+      <div class="meta">
+        <span>Total Qty</span>
+        <strong>{{ med.total_qty }}</strong>
+      </div>
+    </header>
+
+    <div class="timeline">
+      <span class="label">Next expiry</span>
+      <span class="date">{{ med.next_expiry_display }}</span>
+    </div>
+
+    <div class="batch-list">
+      {% if med.batches %}
+        {% for b in med.batches %}
+        <div class="batch {{ b.status }}">
+          <div>
+            <p class="batch-no">Batch {{ b.batch_no or '—' }}</p>
+            <p class="muted">Qty {{ b.qty }}</p>
+          </div>
+          <div class="batch-status">
+            <span class="badge {{ b.status }}">{{ b.status_label }}</span>
+            <span class="muted">{{ b.expiry_display }}</span>
+          </div>
+          <div class="batch-actions">
+            <a class="icon" href="/edit_batch/{{ b.batch_id }}" title="Edit">✎</a>
+            <a class="icon danger" href="/delete_batch/{{ b.batch_id }}" title="Delete">✕</a>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="muted empty">No batches yet — add one below.</p>
+      {% endif %}
+    </div>
+
+    <form class="inline-form" action="/add_batch/{{ med.id }}" method="POST">
+      <input name="batch_no" placeholder="Batch #">
+      <input name="quantity" type="number" min="0" placeholder="Quantity">
+      <input name="expiry" type="date">
+      <button type="submit">Add batch</button>
+    </form>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+  <div class="empty-state">
+    <h3>No medicines yet</h3>
+    <p>Start by adding your first medicine to see it here.</p>
+    <a class="primary" href="/add">Add medicine</a>
+  </div>
+{% endif %}
+
+{% endblock %}

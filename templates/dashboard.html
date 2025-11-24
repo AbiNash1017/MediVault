@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="title">Dashboard</h1>
+
+<div class="cards-row">
+  <div class="stat-card"><h2>{{ total_medicines }}</h2><p>Total Medicines</p></div>
+  <div class="stat-card"><h2>{{ total_batches }}</h2><p>Total Batches</p></div>
+  <div class="stat-card"><h2>{{ soon_expire }}</h2><p>Expiring in 30 days</p></div>
+  <div class="stat-card"><h2>{{ expired_count }}</h2><p>Expired items</p></div>
+</div>
+
+<div class="charts-row">
+  <div class="chart-card">
+    <h3>Category Distribution</h3>
+    <canvas id="categoryChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Expiry Timeline</h3>
+    <canvas id="timelineChart"></canvas>
+  </div>
+</div>
+
+<script>
+  const catLabels = {{ category_labels | tojson }};
+  const catValues = {{ category_counts | tojson }};
+  const timeLabels = {{ time_labels | tojson }};
+  const timeValues = {{ time_totals | tojson }};
+
+  if (document.getElementById('categoryChart')) {
+    new Chart(document.getElementById('categoryChart'), {
+      type: 'pie',
+      data: { labels: catLabels, datasets: [{ data: catValues }] }
+    });
+  }
+
+  if (document.getElementById('timelineChart')) {
+    new Chart(document.getElementById('timelineChart'), {
+      type: 'bar',
+      data: { labels: timeLabels, datasets: [{ data: timeValues }] },
+      options: { scales: { y: { beginAtZero: true } } }
+    });
+  }
+</script>
+{% endblock %}

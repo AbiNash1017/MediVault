@@ -1,0 +1,55 @@
+/* Dashboard card layout */
+.cards-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  padding: 22px;
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.stat-card h2 {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.stat-card p {
+  color: #6b7280;
+}
+
+/* Chart grid */
+.charts-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.chart-card {
+  background: white;
+  padding: 18px;
+  flex: 1;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+}
+
+/* Responsive */
+@media (max-width: 950px) {
+  .cards-row,
+  .charts-row {
+    flex-direction: column;
+  }
+}
+
+.cards-row { display:flex; gap:16px; margin-bottom:24px; }
+.stat-card { flex:1; background:white; padding:22px; text-align:center; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.06); }
+.stat-card h2 { font-size:32px; margin-bottom:6px; }
+.stat-card p { color:#6b7280; }
+.charts-row { display:flex; gap:16px; margin-top:18px; }
+.chart-card { background:white; padding:18px; flex:1; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.07); }
+@media (max-width:950px) { .cards-row, .charts-row { flex-direction:column; } }

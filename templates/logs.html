@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="title">Activity Logs</h1>
+
+<table class="logs-table">
+  <thead>
+    <tr><th>Timestamp</th><th>Action</th><th>Table</th><th>Record ID</th><th>Details</th></tr>
+  </thead>
+  <tbody>
+    {% for r in logs %}
+    <tr>
+      <td>{{ r['timestamp'] }}</td>
+      <td>{{ r['action'] }}</td>
+      <td>{{ r['table_name'] }}</td>
+      <td>{{ r['record_id'] }}</td>
+      <td>{{ r['details'] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
