@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, Response
 from database.setup import init_db, DB_PATH
 import sqlite3
+import csv
+import io
 from datetime import datetime, timedelta
+from models.logs import get_logs
 
 # --------------------------------------------------------
 # Initialize DB on app start
@@ -343,14 +346,39 @@ def dashboard():
 # --------------------------------------------------------
 @app.route("/logs")
 def logs():
-    conn = get_conn()
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM activity_log ORDER BY timestamp DESC LIMIT 200")
-    log_rows = cur.fetchall()
-
-    conn.close()
+    log_rows = get_logs(limit=200)
     return render_template("logs.html", logs=log_rows)
+
+@app.route("/logs/download")
+def download_logs():
+    # Fetch all logs for download
+    rows = get_logs(limit=None)
+
+    # Generate CSV
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Write header
+    writer.writerow(["ID", "Timestamp", "Action", "Table Name", "Record ID", "Details"])
+    
+    # Write data
+    for row in rows:
+        writer.writerow([
+            row["id"], 
+            row["timestamp"], 
+            row["action"], 
+            row["table_name"], 
+            row["record_id"], 
+            row["details"]
+        ])
+    
+    output.seek(0)
+    
+    return Response(
+        output,
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment;filename=activity_logs.csv"}
+    )
 
 # --------------------------------------------------------
 # JSON API - UPCOMING EXPIRY
